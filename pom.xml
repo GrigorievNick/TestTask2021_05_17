@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.test.tasl</groupId>
+    <artifactId>TitlingPointTestTask</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <spark.version>3.0.2</spark.version>
+        <delta.version>0.8.0</delta.version>
+        <third.party.scope>provided</third.party.scope>
+
+        <scala.binary.version>2.12</scala.binary.version>
+        <scala.version>${scala.binary.version}.10</scala.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+    <dependency>
+        <groupId>io.delta</groupId>
+        <artifactId>delta-core_${scala.binary.version}</artifactId>
+        <version>${delta.version}</version>
+    </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.binary.version}</artifactId>
+            <version>${spark.version}</version>
+            <scope>${third.party.scope}</scope>
+        </dependency>
+    <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-sql_${scala.binary.version}</artifactId>
+        <version>${spark.version}</version>
+        <scope>${third.party.scope}</scope>
+    </dependency>
+<!--         TODO add hadoop-aws and hadoop-common to test locally with s3a urls-->
+<!--    <dependency>-->
+<!--        <groupId>org.apache.commons</groupId>-->
+<!--        <artifactId>commons-lang3</artifactId>-->
+<!--        <version>3.9</version>-->
+<!--    </dependency>-->
+
+<!--    <dependency>-->
+<!--        <groupId>junit</groupId>-->
+<!--        <artifactId>junit</artifactId>-->
+<!--        <version>${junit.version}</version>-->
+<!--        <scope>test</scope>-->
+<!--    </dependency>-->
+    </dependencies>
+
+
+    <build>
+        <sourceDirectory>src/main/scala</sourceDirectory>
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>package-jar-with-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>assembly/uber-jar-with-meta-inf-merge.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>4.4.1</version>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <failOnMultipleScalaVersions>true</failOnMultipleScalaVersions>
+                            <encoding>UTF-8</encoding>
+                            <scalaVersion>${scala.version}</scalaVersion>
+                            <jvmArgs>
+                                <jvmArg>-Xms512m</jvmArg>
+                                <jvmArg>-Xmx2048m</jvmArg>
+                                <jvmArg>-Xss4m</jvmArg>
+                            </jvmArgs>
+                            <args>
+                                <arg>-dependencyfile</arg>
+                                <arg>${project.build.directory}/.scala_dependencies</arg>
+                            </args>
+                        </configuration>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

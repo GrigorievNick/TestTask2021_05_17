@@ -1,0 +1,3 @@
+{"user": "A", "timestamp":"2017-12-19 10:41:49", "spend":"1.99","evtname":"iap"}
+{"user": "B", "timestamp":"2017-12-20 11:22:18", "evtname":"tutorial"}
+{"user": "A", "timestamp":"2017-12-20 18:20:10", "spend":"9.99","evtname":"iap"}
